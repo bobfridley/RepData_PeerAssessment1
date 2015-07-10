@@ -1,6 +1,6 @@
 Reproducible Research: Peer Assessment 1
 ==========================================
-Created by Bob Fridley on 2015-07-09 20:33:35
+Created by Bob Fridley on 2015-07-09 21:15:03
 
 >
 Environment | Value
@@ -185,7 +185,7 @@ f <- downloadZipFile(dataDir, fileZip, fileInfo, dataUrl, fileCsv, TRUE)
 Source File Attribute | Value
 --------------------- | ------------------
 Size                  | 350829 Bytes
-Download Date         | 2015-07-09 20:33:38
+Download Date         | 2015-07-09 21:15:05
 URL                   | https://d396qusza40orc.cloudfront.net/repdata/data/activity.zip
 
 >
@@ -236,7 +236,7 @@ plot.1 <- ggplot(act.data.complete.sum, aes(steps)) +
         theme(axis.text.x = element_text(size = 10), 
                 axis.text.y = element_text(size = 10))
 
-save_plot(file.path(figureDir, "hist-steps-day-complete.jpg"), plot.1, base_aspect_ratio = 1.3)
+save_plot(file.path(figureDir, "hist-steps-day-complete.jpg"), plot.1, base_aspect_ratio = 1.5)
 
 print(plot.1)
 ```
@@ -469,7 +469,7 @@ names(act.imputed.mean)[3] <- "steps.mean"
 plot.4 <- ggplot(act.imputed.mean, aes(interval, steps.mean)) + 
         geom_line(color="purple", size=0.6) + 
         facet_wrap(~ weekdays, nrow=2) + 
-        labs(title="Steps Taken Averaged Across Weekday Days or Weekend Days", 
+        labs(title="Steps Taken Averaged Across\nWeekday Days and Weekend Days", 
                 x="Five-minute Intervals From 00:00 to 23:59", 
                 y="Average Number of Steps") + 
         background_grid(major="xy", 
