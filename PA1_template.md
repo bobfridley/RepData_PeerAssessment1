@@ -1,6 +1,6 @@
 Reproducible Research: Peer Assessment 1
 ==========================================
-Created by Bob Fridley on 2015-07-09 21:21:24
+Created by Bob Fridley on 2015-07-09 21:25:22
 
 >
 Environment | Value
@@ -185,7 +185,7 @@ f <- downloadZipFile(dataDir, fileZip, fileInfo, dataUrl, fileCsv, TRUE)
 Source File Attribute | Value
 --------------------- | ------------------
 Size                  | 350829 Bytes
-Download Date         | 2015-07-09 21:21:27
+Download Date         | 2015-07-09 21:25:25
 URL                   | https://d396qusza40orc.cloudfront.net/repdata/data/activity.zip
 
 >
