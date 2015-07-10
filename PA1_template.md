@@ -1,44 +1,44 @@
----
-output: 
-  html_document: 
-    keep_md: yes
----
 Reproducible Research: Peer Assessment 1
 ==========================================
-Created by Bob Fridley on `r as.character(Sys.time())`
+Created by Bob Fridley on 2015-07-09 20:33:35
 
 >
 Environment | Value
 ----------- | ------------------
-R Version   | `r version$version.string`
-OS          | `r version$platform`
+R Version   | R version 3.2.0 (2015-04-16)
+OS          | x86_64-apple-darwin13.4.0
 
 ***
 
 ### Initialize Environment
 >
 * Cleanup environment data/variables
-```{r cleanup_environment}
+
+```r
 rm(list=ls())
 ```
 >
 * Save default value for displaying scientific notation
-```{r save_scipen_default}
+
+```r
 scipenSave <- getOption("scipen")
 ```
 >
 * Turn off scientific notation for numbers in plots
-```{r no_scientific_notation}
+
+```r
 options("scipen" = 1, digits = 2)
 ```
 >
 * Seed for reproductibility
-```{r set_seed}
+
+```r
 set.seed(351900)
 ```
 >
 * Set directory/file paths
-```{r directory_file_paths}
+
+```r
 baseDir <- getwd()
 dataDir <- file.path(baseDir, "data")
 figureDir <- file.path(baseDir, "figures")
@@ -47,29 +47,34 @@ fileCsv <- file.path(dataDir, "activity.csv")
 ```
 >
 * Downloaded file info
-```{r downloaded_file_info}
+
+```r
 fileInfo <- file.path(dataDir, "data-file-downloaded.txt")
 ```
 >
 * Data file url
-```{r datafile_url}
+
+```r
 dataUrl <- "https://d396qusza40orc.cloudfront.net/repdata/data/activity.zip"
 ```
 >
 * Required R packages for project
-```{r required_packes_vector}
+
+```r
 packages <- c("ggplot2", "cowplot", "xtable", "knitr")
 ```
 >
 * Create directory for figures
-```{r directory_for_figures}
+
+```r
 if (!file.exists(figureDir)) {
         dir.create(figureDir)
 }
 ```
 >
 * Function to load packages     
-```{r function_loadPackages}
+
+```r
 #' Simplified loading and installing of packages
 #'
 #' @param p - Character vector of required packages
@@ -101,7 +106,8 @@ loadPackages <- function(p) {
 ```
 >
 * Function to download csv file
-```{r function_downloadZipFile}
+
+```r
 #' Simplified data file download
 #'
 #' @param dir     Data file directory
@@ -145,13 +151,24 @@ downloadZipFile <- function(dir, zip, info, url, csv, refresh) {
 ```
 >
 * Load required packages
-```{r load_required_packages}
+
+```r
 loadPackages(packages)
+```
+
+```
+## 
+## Attaching package: 'cowplot'
+## 
+## The following object is masked from 'package:ggplot2':
+## 
+##     ggsave
 ```
 >
 * Set global options for markdown
     + `opts_chunk` dependent on knitr package
-```{r set_opts_chunk}
+
+```r
 opts_chunk$set(echo = TRUE, results = "hold")
 ```
 
@@ -160,31 +177,35 @@ opts_chunk$set(echo = TRUE, results = "hold")
 ### Loading and preprocessing the data
 >
 * Get source data file
-```{r download_file}
+
+```r
 f <- downloadZipFile(dataDir, fileZip, fileInfo, dataUrl, fileCsv, TRUE)
 ```
 >
 Source File Attribute | Value
 --------------------- | ------------------
-Size                  | `r f$fileSize` Bytes
-Download Date         | `r f$fileDate`
-URL                   | `r f$fileUrl`
+Size                  | 350829 Bytes
+Download Date         | 2015-07-09 20:33:38
+URL                   | https://d396qusza40orc.cloudfront.net/repdata/data/activity.zip
 
 >
 * Read csv data file
     + The csv file was previously identified as having column headers
-```{r read_csv}
+
+```r
 act.data <- read.csv(fileCsv, colClasses = c("integer", "character",
         "integer"), na.strings = "NA", header = TRUE)
 ```
 >
 * Change `date` from character string to date type 
-```{r string_to_date}
+
+```r
 act.data$date <- as.Date(as.character(act.data$date), format = "%Y-%m-%d")
 ```
 >
 * Get subset of `act.data` complete cases
-```{r dataframe_complete_cases}
+
+```r
 act.data.complete <- act.data[complete.cases(act.data), ]
 ```
 
@@ -193,7 +214,8 @@ act.data.complete <- act.data[complete.cases(act.data), ]
 ### What is `mean` total number of steps taken per day
 >
 * Build data frame of total number of steps per day
-```{r dataframe_total_steps}
+
+```r
 act.data.complete.sum <- aggregate(steps ~ date, 
         data = act.data.complete, FUN = "sum")
 act.data.complete.sum$month <- as.character(format(act.data.complete.sum$date, "%B"))
@@ -203,7 +225,8 @@ act.data.complete.sum$month <- factor(act.data.complete.sum$month,
 ```
 >
 * Make a histogram of the total number of steps taken each day
-```{r plot_histogram_total_steps}
+
+```r
 plot.1 <- ggplot(act.data.complete.sum, aes(steps)) + 
         geom_histogram(binwidth = 2000, colour = "plum") + 
         labs(title = "Histogram of Total Steps per Day\nMissing Data Omitted", 
@@ -218,9 +241,12 @@ save_plot(file.path(figureDir, "hist-steps-day-complete.jpg"), plot.1, base_aspe
 print(plot.1)
 ```
 
+![](PA1_template_files/figure-html/plot_histogram_total_steps-1.png) 
+
 >
 * Calculate the `mean` and `median` total steps per day (missing values excluded)
-```{r calc_complete_mean_median}
+
+```r
 act.complete.mean.value <- mean(act.data.complete.sum$steps)
 act.complete.median.value <- median(act.data.complete.sum$steps)
 ```
@@ -228,40 +254,45 @@ act.complete.median.value <- median(act.data.complete.sum$steps)
 >
 Mean   | Median
 ------ | ------
-`r act.complete.mean.value` | `r act.complete.median.value`
+10766.19 | 10765
 
 ***
 
 ### What is the average daily activity pattern?
 >
 * Build data frame of average number of steps per day
-```{r dataframe_avg_steps}
+
+```r
 act.data.complete.mean <- aggregate(act.data.complete$steps, 
         list(interval = as.numeric(as.character(act.data.complete$interval))), 
         FUN = "mean")
 ```
 >
 * Rename column `x` to `steps.mean`
-```{r rename_complete_column_x}
+
+```r
 names(act.data.complete.mean)[2] <- "steps.mean"
 ```
 >
 * Calculate maximum 5-minute interval and `vline` for `ggplot`
-```{r calculate_max_5minute_interval}
+
+```r
 max.steps.index <- which.max(act.data.complete.mean$steps.mean)
 max.xtick <- act.data.complete.mean$interval[max.steps.index]
 max.steps <- act.data.complete.mean$steps.mean[max.steps.index]
 ```
 >
 * Prepare breaks and labels for time series plot
-```{r plot_breaks_labels}
+
+```r
 tsBreaks <- seq(0, 2400, by = 200)
 tsLabels <- formatC(tsBreaks, width = 4, flag = "0")
 tsLabels <- paste0(substr(tsLabels, 1, 2), ":", substr(tsLabels, 3, 4))
 ```
 >
 * Time series plot of the 5-minute interval and average number of steps taken
-```{r plot_timeseries_5minute_interval}
+
+```r
 plot.2 <- ggplot(act.data.complete.mean, aes(interval, steps.mean)) + 
         geom_line(color = "purple", size = 0.6) + 
         labs(title = "Average Number of Steps\nFor Each Five-minute Interval", 
@@ -281,18 +312,21 @@ save_plot(file.path(figureDir, "time-series-avg-steps.jpg"), plot.2, base_aspect
 print(plot.2)
 ```
 
+![](PA1_template_files/figure-html/plot_timeseries_5minute_interval-1.png) 
+
 #### Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 >
 Max 5-minute Interval | Index | Mean
 ----- | --------------------- | ----
-`r formatC(max.xtick, width = 4, flag = "0")` | `r max.steps.index` | `r max.steps`
+0835 | 104 | 206.17
 
 ***
 
 ### Imputing missing values
 >
 * Identify/count missing values
-```{r count_missing_values}
+
+```r
 missing.rows <- is.na(act.data$steps)
 missing.values <- sum(missing.rows)
 missing.total <- length(missing.rows)
@@ -300,34 +334,39 @@ missing.total <- length(missing.rows)
 >
 Rows with Missing Values | Total Missing Values
 ------------------------ | --------------------
-`r missing.total` | `r missing.values`
+17568 | 2304
 
 >
 * Copy original (raw) dataset to create imputed dataset
-```{r copy_raw_dataset}
+
+```r
 act.imputed <- act.data
 ```
 >
 * Devise strategy for filling in all missing values in dataset
     + Replace `NA` values with the interval average
-```{r impute_missing_values}
+
+```r
 rep.times <- length(act.data$steps) / length(act.data.complete.mean$steps.mean)
 act.imputed[missing.rows, "steps"] <- rep(act.data.complete.mean$steps.mean, 
         times = rep.times)[missing.rows]
 ```
 >
 * Build data frame of total number of steps per day
-```{r dataframe_imputed_total_steps}
+
+```r
 act.imputed.sum <- aggregate(steps ~ date, data = act.imputed, FUN = "sum")
 ```
 >
 * Build data frame from original dataset with `month` column
-```{r dataframe_with_month_column}
+
+```r
 act.original.sum <- act.data.complete.sum[, 1:2]
 ```
 >
 * Calculate the `mean` and `median` total steps per day of the imputed data
-```{r calc_imputed_mean_median}
+
+```r
 act.imputed.mean.value <- mean(act.imputed.sum$steps)
 act.imputed.median.value <- median(act.imputed.sum$steps)
 ```
@@ -335,7 +374,7 @@ act.imputed.median.value <- median(act.imputed.sum$steps)
 >
 Mean | Median
 ---- | ------
-`r act.imputed.mean.value` | `r act.imputed.median.value`
+10766.19 | 10766.19
 
 >
 * Calculate difference of `mean`, `median` between complete data and imputed data
@@ -343,22 +382,25 @@ Mean | Median
 >
 Mean | Median
 ---- | ------
-`r act.imputed.mean.value - act.complete.mean.value` | `r act.imputed.median.value - act.complete.median.value`
+0 | 1.19
 
 >
 * Add column `dataset` to identify original and imputed data
-```{r add_column_dataset}
+
+```r
 act.imputed.sum$dataset <- "Imputed Data"
 act.original.sum$dataset <- "Complete Data"
 ```
 >
 * Merge imputed data with complete data
-```{r bind_original_imputed_datasets}
+
+```r
 act.all <- rbind(act.original.sum, act.imputed.sum)
 ```
 >
 * Histogram comparing complete/imputed total number of steps taken each day
-```{r interleaved_histogram}
+
+```r
 plot.3 <- ggplot(act.all, aes(steps, fill = dataset)) + 
         geom_histogram(binwidth = 2000, position = "dodge") + 
         labs(title = "Histogram Comparing Total Steps\nBetween Complete and Imputed Data", 
@@ -373,6 +415,8 @@ save_plot(file.path(figureDir, "hist-months-steps-day-complete.jpg"), plot.3, ba
 print(plot.3)
 ```
 
+![](PA1_template_files/figure-html/interleaved_histogram-1.png) 
+
 #### What is the impact of imputing missing data on the estimates of the total daily number of steps?
 >
 * As the histogram above shows, the total number of steps increased after imputing the data.
@@ -383,7 +427,8 @@ print(plot.3)
 ### Are there differences in activity patterns between weekdays and weekends?
 >
 * Add `daytype` (weekday or weekend) to dataset as factor column
-```{r add_factors_weeday_weekend}
+
+```r
 dayname <- weekdays(act.imputed$date)
 weekend <- c("Saturday", "Sunday")
 act.imputed$daytype <- factor(dayname %in% weekend, labels=c("Weekday", "Weekend"))
@@ -397,14 +442,30 @@ act.imputed.mean <- aggregate(act.imputed$steps,
         weekdays=act.imputed$daytype), 
         FUN="mean")
 ```
+
+```
+##   steps       date interval daytype
+## 1 1.717 2012-10-01        0 Weekday
+## 2 0.340 2012-10-01        5 Weekday
+## 3 0.132 2012-10-01       10 Weekday
+## 4 0.151 2012-10-01       15 Weekday
+## 5 0.075 2012-10-01       20 Weekday
+## 6 2.094 2012-10-01       25 Weekday
+## [1] "Weekday" "Weekend"
+## 
+## Weekday Weekend 
+##   12960    4608
+```
 >
 * Rename column `x` to `steps.mean`
-```{r rename_column_x}
+
+```r
 names(act.imputed.mean)[3] <- "steps.mean"
 ```
 >
 * Create time-series panel plot
-```{r time_series_panel_plot}
+
+```r
 plot.4 <- ggplot(act.imputed.mean, aes(interval, steps.mean)) + 
         geom_line(color="purple", size=0.6) + 
         facet_wrap(~ weekdays, nrow=2) + 
@@ -422,6 +483,8 @@ save_plot(file.path(figureDir, "panel-plot-time-series.jpg"), plot.4, base_aspec
 print(plot.4)
 ```
 
+![](PA1_template_files/figure-html/time_series_panel_plot-1.png) 
+
 >
 * As the panel plot above shows:
     + There is more activity during 8 AM hour of the **Weekdays**.
@@ -431,6 +494,7 @@ print(plot.4)
 
 >
 * Restore defaults
-```{r restore_defaults}
+
+```r
 options("scipen" = scipenSave)
 ```
