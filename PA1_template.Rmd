@@ -203,7 +203,7 @@ act.data.complete.sum$month <- factor(act.data.complete.sum$month,
 ```
 >
 * Make a histogram of the total number of steps taken each day
-```{r plot_histogram_total_steps, fig.width=7, fig.height=5}
+```{r hist-steps-day-complete, fig.width=7, fig.height=5}
 plot.1 <- ggplot(act.data.complete.sum, aes(steps)) + 
         geom_histogram(binwidth = 2000, colour = "plum") + 
         labs(title = "Histogram of Total Steps per Day\nMissing Data Omitted", 
@@ -261,7 +261,7 @@ tsLabels <- paste0(substr(tsLabels, 1, 2), ":", substr(tsLabels, 3, 4))
 ```
 >
 * Time series plot of the 5-minute interval and average number of steps taken
-```{r plot_timeseries_5minute_interval, fig.width=7, fig.height=5}
+```{r time-series-avg-steps, fig.width=7, fig.height=5}
 plot.2 <- ggplot(act.data.complete.mean, aes(interval, steps.mean)) + 
         geom_line(color = "purple", size = 0.6) + 
         labs(title = "Average Number of Steps\nFor Each Five-minute Interval", 
@@ -358,7 +358,7 @@ act.all <- rbind(act.original.sum, act.imputed.sum)
 ```
 >
 * Histogram comparing complete/imputed total number of steps taken each day
-```{r interleaved_histogram, fig.width=7, fig.height=5}
+```{r hist-months-steps-day-complete, fig.width=7, fig.height=5}
 plot.3 <- ggplot(act.all, aes(steps, fill = dataset)) + 
         geom_histogram(binwidth = 2000, position = "dodge") + 
         labs(title = "Histogram Comparing Total Steps\nBetween Complete and Imputed Data", 
@@ -404,7 +404,7 @@ names(act.imputed.mean)[3] <- "steps.mean"
 ```
 >
 * Create time-series panel plot
-```{r time_series_panel_plot, fig.width=7, fig.height=5}
+```{r panel-plot-time-series.jpg, fig.width=7, fig.height=5}
 plot.4 <- ggplot(act.imputed.mean, aes(interval, steps.mean)) + 
         geom_line(color="purple", size=0.6) + 
         facet_wrap(~ weekdays, nrow=2) + 

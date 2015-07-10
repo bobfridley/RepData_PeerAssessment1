@@ -1,6 +1,6 @@
 Reproducible Research: Peer Assessment 1
 ==========================================
-Created by Bob Fridley on 2015-07-09 21:15:03
+Created by Bob Fridley on 2015-07-09 21:21:24
 
 >
 Environment | Value
@@ -185,7 +185,7 @@ f <- downloadZipFile(dataDir, fileZip, fileInfo, dataUrl, fileCsv, TRUE)
 Source File Attribute | Value
 --------------------- | ------------------
 Size                  | 350829 Bytes
-Download Date         | 2015-07-09 21:15:05
+Download Date         | 2015-07-09 21:21:27
 URL                   | https://d396qusza40orc.cloudfront.net/repdata/data/activity.zip
 
 >
@@ -241,7 +241,7 @@ save_plot(file.path(figureDir, "hist-steps-day-complete.jpg"), plot.1, base_aspe
 print(plot.1)
 ```
 
-![](PA1_template_files/figure-html/plot_histogram_total_steps-1.png) 
+![](PA1_template_files/figure-html/hist-steps-day-complete-1.png) 
 
 >
 * Calculate the `mean` and `median` total steps per day (missing values excluded)
@@ -312,7 +312,7 @@ save_plot(file.path(figureDir, "time-series-avg-steps.jpg"), plot.2, base_aspect
 print(plot.2)
 ```
 
-![](PA1_template_files/figure-html/plot_timeseries_5minute_interval-1.png) 
+![](PA1_template_files/figure-html/time-series-avg-steps-1.png) 
 
 #### Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 >
@@ -415,7 +415,7 @@ save_plot(file.path(figureDir, "hist-months-steps-day-complete.jpg"), plot.3, ba
 print(plot.3)
 ```
 
-![](PA1_template_files/figure-html/interleaved_histogram-1.png) 
+![](PA1_template_files/figure-html/hist-months-steps-day-complete-1.png) 
 
 #### What is the impact of imputing missing data on the estimates of the total daily number of steps?
 >
@@ -483,7 +483,7 @@ save_plot(file.path(figureDir, "panel-plot-time-series.jpg"), plot.4, base_aspec
 print(plot.4)
 ```
 
-![](PA1_template_files/figure-html/time_series_panel_plot-1.png) 
+![](PA1_template_files/figure-html/panel-plot-time-series.jpg-1.png) 
 
 >
 * As the panel plot above shows:
